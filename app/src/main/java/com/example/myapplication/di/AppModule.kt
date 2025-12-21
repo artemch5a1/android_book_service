@@ -25,7 +25,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepository(appSession: AppSession) : ApiService {
+    fun provideApiService(appSession: AppSession) : ApiService {
 
         return ApiFactory.create(appSession)
 
