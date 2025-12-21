@@ -3,8 +3,12 @@ package com.example.myapplication.di
 import com.example.myapplication.data.remote.ApiFactory
 import com.example.myapplication.data.remote.ApiService
 import com.example.myapplication.data.repository.AuthRepositoryImpl
+import com.example.myapplication.data.repository.BookRepositoryImpl
+import com.example.myapplication.data.repository.CategoryRepositoryImpl
 import com.example.myapplication.domain.model.AppSession
 import com.example.myapplication.domain.repository.AuthRepository
+import com.example.myapplication.domain.repository.BookRepository
+import com.example.myapplication.domain.repository.CategoryRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,6 +40,22 @@ object AppModule {
     fun provideAuthRepository(apiService: ApiService) : AuthRepository {
 
         return AuthRepositoryImpl(apiService)
+
+    }
+
+    @Provides
+    @Singleton
+    fun provideBookRepository(apiService: ApiService) : BookRepository {
+
+        return BookRepositoryImpl(apiService)
+
+    }
+
+    @Provides
+    @Singleton
+    fun provideCategoryRepository(apiService: ApiService) : CategoryRepository {
+
+        return CategoryRepositoryImpl(apiService)
 
     }
 
