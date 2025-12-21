@@ -5,6 +5,7 @@ import com.example.myapplication.data.remote.ApiService
 import com.example.myapplication.domain.model.LoginRequest
 import com.example.myapplication.domain.model.LoginResponse
 import com.example.myapplication.domain.repository.AuthRepository
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
@@ -12,9 +13,32 @@ class AuthRepositoryImpl @Inject constructor(
 ) : AuthRepository {
 
 
-    override suspend fun loginAsync(loginRequest: LoginRequest): LoginResponse {
-        return LoginMapper
-            .toResponseDomain(apiService.loginAsync(LoginMapper.toRequestDto(loginRequest)))
+    override suspend fun loginAsync(
+        loginRequest: LoginRequest
+    ): LoginResponse {
+
+
+        try {
+            return LoginMapper
+                .toResponseDomain(
+                    apiService
+                        .loginAsync(
+                            LoginMapper
+                                .toRequestDto(loginRequest)
+                        )
+                )
+        }
+        catch (ex: HttpException){
+
+            if(ex.code() == 400){
+                throw Exception("Неверный логин или пароль")
+            }
+
+            throw ex
+
+        }
+
+
     }
 
 
