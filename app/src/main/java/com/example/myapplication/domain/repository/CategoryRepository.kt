@@ -1,0 +1,9 @@
+package com.example.myapplication.domain.repository
+
+import com.example.myapplication.domain.model.Category
+
+interface CategoryRepository {
+
+    suspend fun getAllCategory() : List<Category>
+
+}
