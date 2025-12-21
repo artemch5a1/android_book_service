@@ -6,4 +6,5 @@ interface BookRepository {
 
     suspend fun getAllBooks() : List<Book>
 
+    suspend fun createBook(book: Book)
 }

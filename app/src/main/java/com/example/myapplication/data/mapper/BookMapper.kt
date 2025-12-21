@@ -2,6 +2,7 @@ package com.example.myapplication.data.mapper
 
 import com.example.myapplication.data.dto.ApiCollection
 import com.example.myapplication.data.dto.BookDto
+import com.example.myapplication.data.dto.CreateBookDto
 import com.example.myapplication.domain.model.Book
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
@@ -26,6 +27,19 @@ object BookMapper {
     fun toListDomain(booksDto: ApiCollection<BookDto>) : List<Book>{
 
         return booksDto.items.map { booksDto -> toDomain(booksDto) }
+
+    }
+
+    fun toCreateDto(book: Book) : CreateBookDto{
+        val pattern = DateTimeFormatter.ofPattern("yyy-MM-dd HH:mm:ss.SSSX")
+
+        return CreateBookDto(
+            name = book.name,
+            description = book.description,
+            author = book.author,
+            category = book.category,
+            datePublish = book.datePublish.format(pattern)
+        )
 
     }
 

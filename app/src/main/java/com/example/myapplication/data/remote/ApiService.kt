@@ -3,6 +3,7 @@ package com.example.myapplication.data.remote
 import com.example.myapplication.data.dto.ApiCollection
 import com.example.myapplication.data.dto.BookDto
 import com.example.myapplication.data.dto.CategoryDto
+import com.example.myapplication.data.dto.CreateBookDto
 import com.example.myapplication.data.dto.LoginRequestDto
 import com.example.myapplication.data.dto.LoginResponseDto
 import retrofit2.http.Body
@@ -21,5 +22,10 @@ interface ApiService {
 
     @GET("collections/category/records")
     suspend fun getAllCategory() : ApiCollection<CategoryDto>
+
+    @POST("collections/category/records")
+    suspend fun createBook(
+        @Body createBookDto: CreateBookDto
+    )
 
 }
