@@ -8,7 +8,9 @@ import com.example.myapplication.data.dto.LoginRequestDto
 import com.example.myapplication.data.dto.LoginResponseDto
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface ApiService {
 
@@ -20,11 +22,22 @@ interface ApiService {
     @GET("collections/books/records")
     suspend fun getAllBook() : ApiCollection<BookDto>
 
+    @GET("collections/books/records/{id}")
+    suspend fun getAllBook(
+        @Path("id") id: String
+    ) : BookDto
+
     @GET("collections/category/records")
     suspend fun getAllCategory() : ApiCollection<CategoryDto>
 
     @POST("collections/books/records")
     suspend fun createBook(
+        @Body createBookDto: CreateBookDto
+    )
+
+    @PATCH("collections/books/records/{id}")
+    suspend fun updateBook(
+        @Path("id") id: String,
         @Body createBookDto: CreateBookDto
     )
 

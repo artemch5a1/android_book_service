@@ -42,6 +42,12 @@ class CreateOrEditViewModel @Inject constructor(
 
     val category : LiveData<List<Category>> get() = _category
 
+    private val _isEdit = MutableStateFlow(false)
+
+    val isEdit : StateFlow<Boolean> = _isEdit.asStateFlow()
+
+
+
     fun updateLogin(book: Book){
         _book.value = book
     }
@@ -53,6 +59,8 @@ class CreateOrEditViewModel @Inject constructor(
     init {
         loadAllCategory()
     }
+
+
 
     private fun loadAllCategory(){
         _resultState.value = ResultState.Loading

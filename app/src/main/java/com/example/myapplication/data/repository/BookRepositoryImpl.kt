@@ -17,8 +17,16 @@ class BookRepositoryImpl @Inject constructor(
         )
     }
 
+    override suspend fun getBook(id: String): Book {
+        return BookMapper.toDomain(apiService.getAllBook(id))
+    }
+
     override suspend fun createBook(book: Book) {
         return apiService.createBook(BookMapper.toCreateDto(book))
+    }
+
+    override suspend fun updateBook(book: Book) {
+        return apiService.updateBook(book.id, BookMapper.toCreateDto(book))
     }
 
 
