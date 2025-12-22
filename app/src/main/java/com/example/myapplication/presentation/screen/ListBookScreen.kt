@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -12,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -46,6 +48,8 @@ fun ListBookScreen(
     val resultState = viewModel.resultState.collectAsState()
 
     val textSearch = viewModel.textSearch.collectAsState()
+
+    val isOnlyAuthor = viewModel.isOnlyAuthor.collectAsState()
 
     Box(){
 
@@ -97,6 +101,7 @@ fun ListBookScreen(
                     Spacer(modifier = Modifier.width(20.dp))
                 }
 
+
             }
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -106,6 +111,26 @@ fun ListBookScreen(
             })
             {
                 Text(text = "Создать")
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Row {
+
+                Text(text = "Только свои")
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+
+                Checkbox(
+                    checked = isOnlyAuthor.value,
+                    onCheckedChange = {
+                        viewModel.updateIsOnlyAuthor(
+                            !isOnlyAuthor.value
+                        )
+                    },
+                    modifier = Modifier.padding(bottom = 10.dp)
+                )
             }
         }
 
@@ -203,18 +228,20 @@ fun ListingBook(
 
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        Button(onClick = {
-                            navController.navigate("updateBookScreen/${books[index].id}")
-                        }) {
-                            Text(text = "Обновить")
-                        }
+                        if(viewModel.appSession.currentLogin?.loginDetail?.id == books[index].author){
+                            Button(onClick = {
+                                navController.navigate("updateBookScreen/${books[index].id}")
+                            }) {
+                                Text(text = "Обновить")
+                            }
 
-                        Spacer(modifier = Modifier.height(8.dp))
+                            Spacer(modifier = Modifier.height(8.dp))
 
-                        Button(onClick = {
-                            isShowDeleteDialog = true
-                        }) {
-                            Text(text = "Удалить")
+                            Button(onClick = {
+                                isShowDeleteDialog = true
+                            }) {
+                                Text(text = "Удалить")
+                            }
                         }
                     }
 

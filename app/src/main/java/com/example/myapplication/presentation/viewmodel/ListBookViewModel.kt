@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.myapplication.domain.model.AppSession
 import com.example.myapplication.domain.model.Book
 import com.example.myapplication.domain.model.Category
 import com.example.myapplication.domain.model.CustomResult
@@ -23,7 +24,8 @@ import javax.inject.Inject
 class ListBookViewModel @Inject constructor(
     private val getAllBookUseCase: GetAllBookUseCase,
     private val getAllCategoryUseCase: GetAllCategoryUseCase,
-    private val deleteBookUseCase: DeleteBookUseCase
+    private val deleteBookUseCase: DeleteBookUseCase,
+    val appSession: AppSession
 ) : ViewModel() {
 
     private val _resultState = MutableStateFlow<ResultState>(ResultState.Init)
@@ -43,6 +45,15 @@ class ListBookViewModel @Inject constructor(
     private val _textSearch = MutableStateFlow("")
 
     val textSearch : StateFlow<String> = _textSearch.asStateFlow()
+
+    private val _isOnlyAuthor = MutableStateFlow(false)
+
+    val isOnlyAuthor : StateFlow<Boolean> = _isOnlyAuthor.asStateFlow()
+
+    fun updateIsOnlyAuthor(isOnlyAuthor: Boolean){
+        _isOnlyAuthor.value = isOnlyAuthor
+        refresh()
+    }
 
     fun updateTextSearch(textSearch: String){
         _textSearch.value = textSearch
@@ -145,7 +156,16 @@ class ListBookViewModel @Inject constructor(
                 }
                 is CustomResult.Success<List<Book>> -> {
 
-                    _bookData = result.value
+                    if(_isOnlyAuthor.value){
+                        _bookData = result.value.filter { book ->
+                            appSession.currentLogin?.loginDetail?.id == book.author
+                        }
+                    }
+                    else{
+                        _bookData = result.value
+                    }
+
+
 
                     _books.value = _bookData
 
