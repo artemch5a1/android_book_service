@@ -9,4 +9,21 @@ data class Book(
     val datePublish: OffsetDateTime,
     val author: String,
     val category: String
-)
+){
+    companion object{
+
+        fun createBook(idUser: String) : Book {
+
+            return Book(
+                id = "",
+                name = "",
+                description = "",
+                datePublish = OffsetDateTime.now(),
+                author = idUser,
+                category = ""
+            )
+
+        }
+
+    }
+}

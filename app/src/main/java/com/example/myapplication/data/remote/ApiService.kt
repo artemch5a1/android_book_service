@@ -23,7 +23,7 @@ interface ApiService {
     @GET("collections/category/records")
     suspend fun getAllCategory() : ApiCollection<CategoryDto>
 
-    @POST("collections/category/records")
+    @POST("collections/books/records")
     suspend fun createBook(
         @Body createBookDto: CreateBookDto
     )

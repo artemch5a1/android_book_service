@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.myapplication.presentation.screen.CreateOrEditScreen
 import com.example.myapplication.presentation.screen.ListBookScreen
 import com.example.myapplication.presentation.screen.SignInScreen
 
@@ -20,6 +21,10 @@ fun NavigationHost(){
 
         composable("listBookScreen"){
             ListBookScreen(navController)
+        }
+
+        composable("createBookScreen"){
+            CreateOrEditScreen(navController)
         }
 
     }

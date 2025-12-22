@@ -92,6 +92,15 @@ fun ListBookScreen(
                 }
 
             }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Button(onClick = {
+                navController.navigate("createBookScreen")
+            })
+            {
+                Text(text = "Создать")
+            }
         }
 
         when(resultState.value){
@@ -123,7 +132,7 @@ fun ListingBook(
     navController: NavController
 ){
 
-    Box(modifier = Modifier.padding(top = 180.dp, start = 10.dp, end = 10.dp)){
+    Box(modifier = Modifier.padding(top = 280.dp, start = 10.dp, end = 10.dp)){
 
         LazyColumn {
 
@@ -148,7 +157,7 @@ fun ListingBook(
 
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        Text(text = "Дата выпуска: ${books[index].datePublish}")
+                        Text(text = "Дата выпуска: ${books[index].datePublish.toLocalDate()}")
 
                     }
 
