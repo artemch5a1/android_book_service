@@ -51,9 +51,13 @@ class CreateOrEditViewModel @Inject constructor(
     val isEdit : StateFlow<Boolean> = _isEdit.asStateFlow()
 
 
+    private val _selectedCategory = MutableStateFlow<Category?>(null)
+
+    val selectedCategory : StateFlow<Category?> = _selectedCategory.asStateFlow()
 
     fun updateLogin(book: Book){
         _book.value = book
+        _selectedCategory.value = _category.value?.firstOrNull { it -> it.id == _book.value.category }
     }
 
     fun execute(){
@@ -84,6 +88,9 @@ class CreateOrEditViewModel @Inject constructor(
 
                     _book.value = result.value
 
+                    _selectedCategory.value =
+                        _category.value?.firstOrNull { it -> it.id == _book.value.category }
+
                     _resultState.value = ResultState.Init
                 }
             }
@@ -104,6 +111,9 @@ class CreateOrEditViewModel @Inject constructor(
                 is CustomResult.Success<List<Category>> -> {
 
                     _category.value = result.value
+
+                    _selectedCategory.value =
+                        _category.value?.firstOrNull { it -> it.id == _book.value.category }
 
                     _resultState.value = ResultState.Init
                 }

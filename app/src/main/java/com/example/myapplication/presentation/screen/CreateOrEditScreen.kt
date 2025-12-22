@@ -39,6 +39,8 @@ fun CreateOrEditScreen(
 
     val category = viewModel.category.observeAsState(emptyList())
 
+    val selectedCategory = viewModel.selectedCategory.collectAsState()
+
     LaunchedEffect(Unit)
     {
         if(id != null){
@@ -125,7 +127,9 @@ fun CreateOrEditScreen(
                             category = it.id
                         )
                     )
+
                 },
+                selectedItem = selectedCategory.value
             )
 
             Spacer(modifier = Modifier.height(8.dp))

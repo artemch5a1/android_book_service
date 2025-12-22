@@ -70,13 +70,11 @@ fun<T> CustomDropDown(
     selectedItem: T? = null
 ){
 
-    var currentItem by remember { mutableStateOf(selectedItem) }
-
     var expanded by remember { mutableStateOf(false) }
 
     Box(){
         OutlinedTextField(
-            value = currentItem?.let { display(it) } ?: "",
+            value = selectedItem?.let { display(it) } ?: "",
             onValueChange = {
 
             },
@@ -112,7 +110,6 @@ fun<T> CustomDropDown(
                         },
                         onClick = {
                             onSelectedItem(items[index])
-                            currentItem = items[index]
                             expanded = false
                         }
                     )
