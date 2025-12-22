@@ -12,6 +12,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -28,6 +29,7 @@ import com.example.myapplication.presentation.viewmodel.CreateOrEditViewModel
 @Composable
 fun CreateOrEditScreen(
     navController: NavController,
+    id: String? = null,
     viewModel: CreateOrEditViewModel = hiltViewModel()
 ){
 
@@ -36,6 +38,13 @@ fun CreateOrEditScreen(
     val book = viewModel.book.collectAsState()
 
     val category = viewModel.category.observeAsState(emptyList())
+
+    LaunchedEffect(Unit)
+    {
+        if(id != null){
+            viewModel.loadBook(id)
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()){
 

@@ -159,6 +159,13 @@ fun ListingBook(
 
                         Text(text = "Дата выпуска: ${books[index].datePublish.toLocalDate()}")
 
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Button(onClick = {
+                            navController.navigate("updateBookScreen/${books[index].id}")
+                        }) {
+                            Text(text = "Обновить")
+                        }
                     }
 
                 }

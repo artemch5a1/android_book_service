@@ -11,6 +11,8 @@ import com.example.myapplication.domain.model.CustomResult
 import com.example.myapplication.domain.model.LoginRequest
 import com.example.myapplication.domain.usecase.CreateBookUseCase
 import com.example.myapplication.domain.usecase.GetAllCategoryUseCase
+import com.example.myapplication.domain.usecase.GetBookByIdUseCase
+import com.example.myapplication.domain.usecase.UpdateBookUseCase
 import com.example.myapplication.presentation.model.ResultState
 import com.example.myapplication.presentation.model.SelectedItem
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +26,9 @@ import javax.inject.Inject
 class CreateOrEditViewModel @Inject constructor(
     private val createBookUseCase: CreateBookUseCase,
     private val appSession: AppSession,
-    private val getAllCategoryUseCase: GetAllCategoryUseCase
+    private val getAllCategoryUseCase: GetAllCategoryUseCase,
+    private val getBookByIdUseCase: GetBookByIdUseCase,
+    private val updateBookUseCase: UpdateBookUseCase
 ) : ViewModel() {
 
 
@@ -53,14 +57,39 @@ class CreateOrEditViewModel @Inject constructor(
     }
 
     fun execute(){
-        createBook()
+        if(_isEdit.value){
+            updateBook()
+        }else{
+            createBook()
+        }
     }
 
     init {
         loadAllCategory()
     }
 
+    fun loadBook(id: String){
+        _resultState.value = ResultState.Loading
 
+        _isEdit.value = true
+
+        viewModelScope.launch {
+            when(val result = getBookByIdUseCase(id)){
+                is CustomResult.Failure -> {
+
+                    _resultState.value = ResultState.Error(result.message)
+
+                }
+                is CustomResult.Success<Book> -> {
+
+                    _book.value = result.value
+
+                    _resultState.value = ResultState.Init
+                }
+            }
+        }
+
+    }
 
     private fun loadAllCategory(){
         _resultState.value = ResultState.Loading
@@ -89,6 +118,28 @@ class CreateOrEditViewModel @Inject constructor(
         viewModelScope.launch {
 
             when(val result = createBookUseCase(_book.value)){
+                is CustomResult.Failure -> {
+
+                    _resultState.value = ResultState.Error(result.message)
+
+                }
+                is CustomResult.Success<Unit> -> {
+
+                    _resultState.value = ResultState.Success()
+
+                }
+            }
+
+        }
+
+    }
+
+    private fun updateBook(){
+        _resultState.value = ResultState.Loading
+
+        viewModelScope.launch {
+
+            when(val result = updateBookUseCase(_book.value)){
                 is CustomResult.Failure -> {
 
                     _resultState.value = ResultState.Error(result.message)
