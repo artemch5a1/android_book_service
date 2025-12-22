@@ -10,11 +10,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -65,6 +69,16 @@ fun ListBookScreen(
                 },
                 label = {
                     Text(text = "Поиск")
+                },
+                trailingIcon = {
+                    IconButton(onClick = {
+                        viewModel.refresh()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            ""
+                        )
+                    }
                 },
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
