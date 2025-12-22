@@ -6,7 +6,9 @@ import com.example.myapplication.data.dto.CategoryDto
 import com.example.myapplication.data.dto.CreateBookDto
 import com.example.myapplication.data.dto.LoginRequestDto
 import com.example.myapplication.data.dto.LoginResponseDto
+import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -40,5 +42,10 @@ interface ApiService {
         @Path("id") id: String,
         @Body createBookDto: CreateBookDto
     )
+
+    @DELETE("collections/books/records/{id}")
+    suspend fun deleteBook(
+        @Path("id") id: String
+    ) : Response<Unit?>
 
 }

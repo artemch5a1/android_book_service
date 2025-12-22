@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.myapplication.domain.model.Book
 import com.example.myapplication.domain.model.Category
 import com.example.myapplication.domain.model.CustomResult
+import com.example.myapplication.domain.usecase.DeleteBookUseCase
 import com.example.myapplication.domain.usecase.GetAllBookUseCase
 import com.example.myapplication.domain.usecase.GetAllCategoryUseCase
 import com.example.myapplication.presentation.model.ResultState
@@ -21,7 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ListBookViewModel @Inject constructor(
     private val getAllBookUseCase: GetAllBookUseCase,
-    private val getAllCategoryUseCase: GetAllCategoryUseCase
+    private val getAllCategoryUseCase: GetAllCategoryUseCase,
+    private val deleteBookUseCase: DeleteBookUseCase
 ) : ViewModel() {
 
     private val _resultState = MutableStateFlow<ResultState>(ResultState.Init)
@@ -86,6 +88,27 @@ class ListBookViewModel @Inject constructor(
     fun refresh(){
         loadAllCategory()
         loadAllBook()
+    }
+
+    fun deleteBook(id: String){
+
+        _resultState.value = ResultState.Loading
+
+        viewModelScope.launch {
+            when(val result = deleteBookUseCase(id)){
+                is CustomResult.Failure -> {
+
+                    _resultState.value = ResultState.Error(result.message)
+
+                }
+                is CustomResult.Success<Unit> -> {
+
+                    refresh()
+                    _resultState.value = ResultState.Init
+                }
+            }
+        }
+
     }
 
     private fun loadAllCategory(){

@@ -29,5 +29,9 @@ class BookRepositoryImpl @Inject constructor(
         return apiService.updateBook(book.id, BookMapper.toCreateDto(book))
     }
 
+    override suspend fun deleteBook(id: String) {
+        apiService.deleteBook(id)
+    }
+
 
 }

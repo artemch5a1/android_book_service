@@ -9,14 +9,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -110,7 +116,7 @@ fun ListBookScreen(
                     Alignment.Center))
             }
             ResultState.Init -> {
-                ListingBook(books.value, navController)
+                ListingBook(books.value, navController, viewModel)
             }
             ResultState.Loading -> {
                 CircularProgressIndicator(
@@ -119,7 +125,7 @@ fun ListBookScreen(
                 )
             }
             is ResultState.Success -> {
-                ListingBook(books.value, navController)
+                ListingBook(books.value, navController, viewModel)
             }
         }
 
@@ -129,7 +135,8 @@ fun ListBookScreen(
 @Composable
 fun ListingBook(
     books: List<Book>,
-    navController: NavController
+    navController: NavController,
+    viewModel: ListBookViewModel
 ){
 
     Box(modifier = Modifier.padding(top = 280.dp, start = 10.dp, end = 10.dp)){
@@ -138,6 +145,41 @@ fun ListingBook(
 
             items(books.size){
                 index ->
+
+                var isShowDeleteDialog by remember { mutableStateOf(false) }
+
+                if(isShowDeleteDialog){
+                    AlertDialog(
+                        text = {
+                            Text(text = "Точно хотите удалить?")
+                        },
+                        title = {
+                            Text(text = "Подтверждение")
+                        },
+                        onDismissRequest = {
+                            isShowDeleteDialog = false
+                        },
+                        confirmButton = {
+                            TextButton(
+                                onClick = {
+                                    viewModel.deleteBook(books[index].id)
+                                    isShowDeleteDialog = false
+                                }
+                            ) {
+                                Text(text = "Да")
+                            }
+                        },
+                        dismissButton = {
+                            TextButton(
+                                onClick = {
+                                    isShowDeleteDialog = false
+                                }
+                            ) {
+                                Text(text = "Нет")
+                            }
+                        }
+                    )
+                }
 
                 Box(
                     modifier = Modifier.background(
@@ -165,6 +207,14 @@ fun ListingBook(
                             navController.navigate("updateBookScreen/${books[index].id}")
                         }) {
                             Text(text = "Обновить")
+                        }
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Button(onClick = {
+                            isShowDeleteDialog = true
+                        }) {
+                            Text(text = "Удалить")
                         }
                     }
 
