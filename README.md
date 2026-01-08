@@ -15,6 +15,8 @@
 * 🗂 Получение категорий
 * 💾 Локальное хранение токена (через сессию)
 * ⚡ Jetpack Compose UI с ViewModel и state
+* 🔍 Фильтрация книг по тексту и категориям
+* 👤 Опциональная фильтрация только книг текущего автора
 
 ---
 
@@ -28,7 +30,8 @@
 * Material 3 дизайн
 * Navigation Compose
 * ViewModel
-* ResultState + выбранные элементы (SelectedItem)
+* ResultState + SelectedItem
+* Фильтрация книг по тексту и категориям
 
 ### 🧠 Domain (ядро логики)
 
@@ -40,6 +43,7 @@
   * `CreateBookUseCase`
   * `LoginUseCase`
   * `UpdateBookUseCase`
+  * `DeleteBookUseCase`
   * и другие
 
 ### 🌐 Data (инфраструктура)
@@ -109,7 +113,8 @@ URL при необходимости меняется в `ApiFactory.kt`.
 * Material Design 3
 * Navigation Compose
 * Lifecycle ViewModel
-* LiveData (локально)
+* LiveData
+* StateFlow для фильтрации
 
 ### 🔌 Networking
 
@@ -200,13 +205,3 @@ app/src/androidTest
 GitHub: [https://github.com/artemch5a1](https://github.com/artemch5a1)
 
 ---
-
-### 🎁 Возможное дополнение
-
-Можно добавить:
-
-* README на английском
-* ER-диаграмму PocketBase
-* Docker-образ PocketBase
-* Деплой на VPS
-* CI/CD и сборку релиза APK
